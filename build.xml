@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+<project name="iTunesLibraryXmlParser" default="deploy" basedir=".">
+	<!-- Set TODAY variable. -->
+	<tstamp>
+		<format property="TODAY" pattern="yyyyMMdd" />
+	</tstamp>
+
+	<!-- version number of the build. -->
+	<property name="spec.version" value="1.0.0" />
+	<property name="build.version" value="${spec.version}.${TODAY}" />
+	<property name="app.name" value="iTunesLibraryXmlParser" />
+	<property name="vendor.name" value="Kishore Donthineni" />
+	<property name="build.dir" value="build" />
+	<property name="dist.dir" value="dist" />
+	<property name="src.dir" value="src" />
+	<property name="classes.dir" value="${build.dir}/classes" />
+	<property name="lib.dir" value="lib" />
+	<property name="top.dir" value="."/>
+	<property name="parser.package" value="com.kishore.itunes.parser" />
+	<property name="tools.package" value="com.kishore.itunes.tools" />
+	<property name="parser.jar" value="${parser.package}.jar" />
+	<property name="tools.jar" value="${tools.package}.jar" />
+	<property name="third.party.jars" value="commons-configuration-1.10.jar log4j-1.2.17.jar slf4j-api-1.7.10.jar slf4j-log4j12-1.7.10.jar" />
+	
+	<!-- set the classpath for the TapEngine -->
+	<path id="compile.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="*.jar" />
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<!-- Remove build files from previous run. -->
+	<target name="clean">
+		<delete dir="${build.dir}" />
+		<delete dir="${dist.dir}" />
+	</target>
+
+	<!-- Intialization task to clean and create required directories. -->
+	<target name="init" depends="clean">
+		<mkdir dir="${classes.dir}" />
+		<mkdir dir="${dist.dir}" />
+	</target>
+
+	<!-- compile the batch executable excluding the test source -->
+	<target name="compile" depends="init">
+		<javac destdir="${classes.dir}" debug="true" srcdir="${src.dir}" includeantruntime="false">
+			<classpath refid="compile.classpath" />
+		</javac>
+
+		<copy todir="${classes.dir}">
+			<fileset dir="${src.dir}">
+				<include name="**/*.*" />
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+	<!--Creates the deployable jar file  -->
+	
+	<target name="jar" depends="compile">
+		<jar destfile="${dist.dir}/${parser.jar}" basedir="${classes.dir}" includes="com/kishore/itunes/parser/**">
+			<manifest>
+				<attribute name="Specification-Title" value="iTunes Library Xml Parser" />
+				<attribute name="Specification-Version" value="${spec.version}" />
+				<attribute name="Specification-Vendor" value="${vendor.name}" />
+				<attribute name="Package-Title" value="${parser.package}" />
+				<attribute name="Package-Version" value="${build.version}" />
+				<attribute name="Package-Vendor" value="${vendor.name}" />
+				<attribute name="Class-Path" value="${third.party.jars}" />
+			</manifest>
+		</jar>
+		<jar destfile="${dist.dir}/${tools.jar}" basedir="${classes.dir}" includes="com/kishore/itunes/tools/**">
+			<manifest>
+				<attribute name="Main-Class" value="${tools.package}.MainClass" />
+				<attribute name="Specification-Title" value="iTunes Library Xml Parser Main" />
+				<attribute name="Specification-Version" value="${spec.version}" />
+				<attribute name="Specification-Vendor" value="${vendor.name}" />
+				<attribute name="Package-Title" value="${tools.package}" />
+				<attribute name="Package-Version" value="${build.version}" />
+				<attribute name="Package-Vendor" value="${vendor.name}" />
+				<attribute name="Class-Path" value="${third.party.jars} ${parser.jar}" />
+			</manifest>
+	  </jar>
+	</target>
+
+	<!-- Compile, build jar file and copy to dist folder. -->
+	<target name="deploy" depends="jar">
+		<copy todir="${dist.dir}">
+			<fileset dir="${lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${lib.dir}">
+				<include name="*.properties" />
+			</fileset>
+		</copy>
+	</target>
+
+</project>
