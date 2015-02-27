@@ -21,7 +21,7 @@
 	<property name="tools.package" value="com.kishore.itunes.tools" />
 	<property name="parser.jar" value="${parser.package}.jar" />
 	<property name="tools.jar" value="${tools.package}.jar" />
-	<property name="third.party.jars" value="commons-configuration-1.10.jar log4j-1.2.17.jar slf4j-api-1.7.10.jar slf4j-log4j12-1.7.10.jar" />
+	<property name="third.party.jars" value="commons-codec-1.10.jar commons-collections4-4.0.jar commons-configuration-1.10.jar commons-io-2.4.jar commons-lang-2.6.jar commons-logging-1.2.jar log4j-1.2.17.jar slf4j-api-1.7.10.jar slf4j-log4j12-1.7.10.jar" />
 	
 	<!-- set the classpath for the TapEngine -->
 	<path id="compile.classpath">
