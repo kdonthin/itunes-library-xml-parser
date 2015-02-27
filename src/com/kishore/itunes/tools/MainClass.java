@@ -40,7 +40,7 @@ public class MainClass
 		
 		TunesLibrary tunesLibrary = new TunesLibrary(libraryLocation) ;
 		
-		logger.info( "Music Folder : " + tunesLibrary.getMusicFolder());
+		logger.info( tunesLibrary.toString() );
 	}
 
 	private static void usage()
